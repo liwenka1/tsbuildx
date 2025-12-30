@@ -1,0 +1,49 @@
+{
+  "name": "tsbuildx",
+  "version": "0.0.1",
+  "description": "ESM-only bundler powered by esbuild + lightningcss",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "tsbuildx": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "esbuild": "^0.24.0",
+    "lightningcss": "^1.28.2",
+    "picocolors": "^1.1.1",
+    "tinyglobby": "^0.2.10"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "keywords": [
+    "bundler",
+    "esbuild",
+    "lightningcss",
+    "esm",
+    "typescript",
+    "build-tool"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "pnpm@9.15.1"
+}
