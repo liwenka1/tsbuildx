@@ -1,0 +1,11 @@
+/** @type {import("prettier").Config} */
+export default {
+  printWidth: 120,
+  tabWidth: 2,
+  useTabs: false,
+  singleQuote: false,
+  semi: true,
+  trailingComma: "none",
+  bracketSpacing: true,
+  endOfLine: "lf"
+};
