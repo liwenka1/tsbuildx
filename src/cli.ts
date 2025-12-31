@@ -3,7 +3,10 @@
 import { cac } from "cac";
 import pc from "picocolors";
 import { build } from "./build.js";
-import { version } from "../package.json" with { type: "json" };
+import { createRequire } from "node:module";
+
+const require = createRequire(import.meta.url);
+const { version } = require("../package.json");
 
 const cli = cac("tsbuildx");
 

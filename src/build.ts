@@ -1,8 +1,9 @@
 import { rm } from "node:fs/promises";
 import pc from "picocolors";
 import { resolveConfig } from "./config.js";
-import { buildWithEsbuild, buildWithLightningCSS } from "./builders/index.js";
+import { buildWithEsbuild, buildWithLightningCSS, buildDts } from "./builders/index.js";
 import { getEntryType, formatSize, formatDuration } from "./utils.js";
+import { loadConfigFile } from "./loader.js";
 import type { BuildOptions, BuildResult, Entry } from "./types.js";
 
 /**
@@ -10,14 +11,14 @@ import type { BuildOptions, BuildResult, Entry } from "./types.js";
  */
 export async function build(options: BuildOptions = {}): Promise<BuildResult> {
   const startTime = performance.now();
-  const config = resolveConfig(options);
+  const cwd = process.cwd();
 
-  // 清空输出目录
-  if (config.clean) {
-    await rm(config.outDir, { recursive: true, force: true });
-  }
+  // 先加载配置文件（在 clean 之前，避免自举时删除自己）
+  const fileConfig = await loadConfigFile(cwd);
+  const mergedOptions = { ...fileConfig, ...options };
+  const config = resolveConfig(mergedOptions, cwd);
 
-  // 按类型分组入口
+  // 按类型分组入口（在 clean 之前准备好）
   const jsEntries: Entry[] = [];
   const cssEntries: Entry[] = [];
 
@@ -30,13 +31,19 @@ export async function build(options: BuildOptions = {}): Promise<BuildResult> {
     }
   }
 
+  // 清空输出目录
+  if (config.clean) {
+    await rm(config.outDir, { recursive: true, force: true });
+  }
+
   // 并行构建
-  const [jsOutputs, cssOutputs] = await Promise.all([
+  const [jsOutputs, cssOutputs, dtsOutputs] = await Promise.all([
     buildWithEsbuild(jsEntries, config),
-    buildWithLightningCSS(cssEntries, config)
+    buildWithLightningCSS(cssEntries, config),
+    buildDts(jsEntries, config)
   ]);
 
-  const outputs = [...jsOutputs, ...cssOutputs];
+  const outputs = [...jsOutputs, ...cssOutputs, ...dtsOutputs];
   const duration = Math.round(performance.now() - startTime);
 
   // 打印构建结果
@@ -46,7 +53,8 @@ export async function build(options: BuildOptions = {}): Promise<BuildResult> {
 
   for (const output of outputs) {
     const sizeStr = pc.dim(formatSize(output.size));
-    const typeStr = output.type === "css" ? pc.magenta("css") : pc.cyan("js");
+    const isDts = output.path.endsWith(".d.ts");
+    const typeStr = output.type === "css" ? pc.magenta("css") : isDts ? pc.yellow("dts") : pc.cyan("js");
     console.log(`  ${typeStr} ${pc.white(output.path)} ${sizeStr}`);
   }
 

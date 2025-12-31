@@ -36,35 +36,35 @@ tsbuildx --help
 ### Programmatic API
 
 ```ts
-import { build, defineConfig } from 'tsbuildx'
+import { build, defineConfig } from "tsbuildx";
 
 // 直接调用
 await build({
-  entry: ['src/index.ts', 'src/styles.css'],
-  outDir: 'dist',
-})
+  entry: ["src/index.ts", "src/styles.css"],
+  outDir: "dist"
+});
 
 // 使用 defineConfig 获得类型提示
 export default defineConfig({
-  entry: ['src/index.ts'],
-  outDir: 'dist',
+  entry: ["src/index.ts"],
+  outDir: "dist",
   minify: true,
-  sourcemap: true,
-})
+  sourcemap: true
+});
 ```
 
 ## Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `entry` | `string \| string[]` | `['src/index.ts']` | 入口文件 |
-| `outDir` | `string` | `'dist'` | 输出目录 |
-| `sourcemap` | `boolean` | `false` | 生成 sourcemap |
-| `minify` | `boolean` | `true` | 压缩代码 |
-| `target` | `string \| string[]` | `['es2022']` | 目标环境 |
-| `clean` | `boolean` | `true` | 构建前清空输出目录 |
-| `external` | `string[]` | `[]` | 外部依赖 |
-| `dts` | `boolean` | `true` | 生成类型声明 |
+| Option      | Type                 | Default            | Description        |
+| ----------- | -------------------- | ------------------ | ------------------ |
+| `entry`     | `string \| string[]` | `['src/index.ts']` | 入口文件           |
+| `outDir`    | `string`             | `'dist'`           | 输出目录           |
+| `sourcemap` | `boolean`            | `false`            | 生成 sourcemap     |
+| `minify`    | `boolean`            | `true`             | 压缩代码           |
+| `target`    | `string \| string[]` | `['es2022']`       | 目标环境           |
+| `clean`     | `boolean`            | `true`             | 构建前清空输出目录 |
+| `external`  | `string[]`           | `[]`               | 外部依赖           |
+| `dts`       | `boolean`            | `true`             | 生成类型声明       |
 
 ## License
 

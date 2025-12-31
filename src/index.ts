@@ -1,6 +1,7 @@
 // Core API
 export { build } from "./build.js";
 export { defineConfig, resolveConfig } from "./config.js";
+export { loadConfigFile } from "./loader.js";
 
 // Types
 export type { BuildOptions, ResolvedConfig, BuildResult, OutputFile, Entry, EntryType, DefineConfig } from "./types.js";

@@ -21,6 +21,8 @@ export async function buildWithEsbuild(entries: Entry[], config: ResolvedConfig)
     target: config.target,
     sourcemap: config.sourcemap,
     minify: config.minify,
+    // ESM-only: 所有 node_modules 依赖都设为 external
+    packages: "external",
     external: config.external,
     metafile: true,
     splitting: entries.length > 1,
